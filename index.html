@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html ng-app="dummySocMed" ng-controller="Ctrl">
+  <head>
+    <script src="angular.min.js"></script>
+    <folder src>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>UAS PTI</title>
+
+    <script>
+    var app = angular.module("dummySocMed", []);
+    var loadedGeneralPosts = 0;
+
+    app.controller("Ctrl", function($scope, $http, $window) {
+      var loadedFriendList = 0;
+      var loadedTagList = 0;
+
+//Main Menu Post Functions-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    $scope.mainMenuPost = function(){
+      if (loadedGeneralPosts = 0){
+        $http({
+          method: "GET",
+          url: "https://dummyapi.io/data/api/post/",
+          headers:{"app-id": "5fce49af8e1c4117d5c98626"}
+          })
+        .then(function(response) {
+          $scope.generalPost = response.data.data;
+          document.getElementById("fullProfile").style.display="none";
+          document.getElementById("postList").style.display="none";
+          document.getElementById("friendList").style.display="block";
+          document.getElementById("userList").style.display="none";
+          document.getElementById("listOfTags").style.display="none";
+          document.getElementById("tagList").style.display="block";
+          document.getElementById("postByTagList").style.display="none";
+          document.getElementById("postComments").style.display="none";
+          document.getElementById("information").style.display="block";
+          document.getElementById("aboutUs").style.display="none";
+          console.log($scope.generalPost);
+          })
+          toggleGeneralPost();
+          document.getElementById("listOfTags").style.display="none";
+          document.getElementById("userList").style.display="none";
+          loadedGeneralPosts = 1;
+      }
+      else{
+        toggleGeneralPost();
+        document.getElementById("listOfTags").style.display="none";
+        document.getElementById("userList").style.display="none";
+      }
+    }
+
+    function mainPost(){
+      $http({
+        method: "GET",
+        url: "https://dummyapi.io/data/api/post/",
+        headers:{"app-id": "5fce49af8e1c4117d5c98626"}
+        })
+      .then(function(response) {
+        $scope.generalPost = response.data.data;
+        document.getElementById("fullProfile").style.display="none";
+        document.getElementById("postList").style.display="none";
+        document.getElementById("friendList").style.display="block";
+        document.getElementById("userList").style.display="none";
+        document.getElementById("listOfTags").style.display="none";
+        document.getElementById("tagList").style.display="block";
+        document.getElementById("postByTagList").style.display="none";
+        document.getElementById("postComments").style.display="none";
+        document.getElementById("information").style.display="block";
+        document.getElementById("aboutUs").style.display="none";
+        console.log($scope.generalPost);
+        })
+        toggleGeneralPost();
+        document.getElementById("listOfTags").style.display="none";
+        document.getElementById("userList").style.display="none";
+        loadedGeneralPosts = 1;
+    }
+
+    mainPost();
+
+    function toggleGeneralPost(){
+      var hide = document.getElementById("generalPosts");
+        if (hide.style.display === "block") {
+          hide.style.display = "none";
+        }
+        else {
+          hide.style.display = "block";
+        }
+    }
+// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//Friend List functions------------------------------------------------------------------------------------------------------------------------------------------------------------
+    $scope.friendList = function(){
+      if (loadedFriendList == 0){
+        $http({
+          method: "GET",
+          url: "https://dummyapi.io/data/api/user",
+          headers:{"app-id": "5fce49af8e1c4117d5c98626"}
+          })
+        .then(function(response) {
+          $scope.list = response.data.data;
+          console.log($scope.list);
+          })
+          toggleUserList();
+          document.getElementById("listOfTags").style.display="none";
+          document.getElementById("generalPosts").style.display="none";
+          loadedFriendList = 1;
+      }
+      else{
+        toggleUserList();
+        document.getElementById("listOfTags").style.display="none";
+        document.getElementById("generalPosts").style.display="none";
+      }
+    }
+
+    function toggleUserList(){
+      var hide = document.getElementById("userList");
+        if (hide.style.display === "block") {
+          hide.style.display = "none";
+        }
+        else {
+          hide.style.display = "block";
+        }
+    }
+// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//Profile and Posts function-------------------------------------------------------------------------------------------------------------------------------------------------
+    $scope.viewProfile = function(id){
+        $http({
+          method: "GET",
+          url: "https://dummyapi.io/data/api/user/"+id,
+          headers:{"app-id": "5fce49af8e1c4117d5c98626"}
+          })
+        .then(function(response) {
+          $scope.profile = response.data;
+          $scope.pPicture = $scope.profile.picture;
+          $scope.pID = $scope.profile.id;
+          $scope.pGender = $scope.profile.gender;
+          $scope.pTitle = $scope.profile.title;
+          $scope.pFirstName = $scope.profile.firstName;
+          $scope.pLastName = $scope.profile.lastName;
+          $scope.pEmail = $scope.profile.email;
+          $scope.pBirthDate = $scope.profile.dateOfBirth;
+          $scope.pRegisterDate = $scope.profile.registerDate;
+          $scope.pPhone = $scope.profile.phone;
+          $scope.pCountry = $scope.profile.location.country;
+          $scope.pState = $scope.profile.location.state;
+          $scope.pCity = $scope.profile.location.city;
+          $scope.pStreet = $scope.profile.location.street;
+          document.getElementById("fullProfile").style.display="block";
+          document.getElementById("postList").style.display="none";
+          document.getElementById("friendList").style.display="none";
+          document.getElementById("userList").style.display="none";
+          document.getElementById("listOfTags").style.display="none";
+          document.getElementById("tagList").style.display="none";
+          document.getElementById("postByTagList").style.display="none";
+          document.getElementById("postComments").style.display="none";
+          document.getElementById("generalPostList").style.display="none";
+          document.getElementById("generalPosts").style.display="none";
+          document.getElementById("information").style.display="none";
+          document.getElementById("aboutUs").style.display="none";
+          console.log($scope.profile);
+          })
+      }
+
+    $scope.viewPosts = function(id){
+      $http({
+        method: "GET",
+        url: "https://dummyapi.io/data/api/user/"+id+"/post",
+        headers:{"app-id": "5fce49af8e1c4117d5c98626"}
+        })
+      .then(function(response) {
+        $scope.post = response.data.data;
+        document.getElementById("fullProfile").style.display="none";
+        document.getElementById("postList").style.display="block";
+        document.getElementById("friendList").style.display="none";
+        document.getElementById("userList").style.display="none";
+        document.getElementById("listOfTags").style.display="none";
+        document.getElementById("tagList").style.display="none";
+        document.getElementById("postByTagList").style.display="none";
+        document.getElementById("postComments").style.display="none";
+        document.getElementById("generalPostList").style.display="none";
+        document.getElementById("generalPosts").style.display="none";
+        document.getElementById("information").style.display="none";
+        document.getElementById("aboutUs").style.display="none";
+        console.log($scope.post);
+        });
+    }
+
+    $scope.return = function(){
+      $window.location.reload();
+    }
+// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//Tag Functions-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    $scope.tagList = function(){
+      if (loadedTagList == 0){
+        $http({
+          method: "GET",
+          url: "https://dummyapi.io/data/api/tag",
+          headers:{"app-id": "5fce49af8e1c4117d5c98626"}
+          })
+        .then(function(response) {
+          $scope.tags = response.data.data;
+          console.log($scope.tags);
+          })
+          toggleListOfTags();
+          document.getElementById("userList").style.display="none";
+          document.getElementById("generalPosts").style.display="none";
+          loadedTagList = 1;
+      }
+      else{
+        toggleListOfTags();
+        document.getElementById("userList").style.display="none";
+        document.getElementById("generalPosts").style.display="none";
+      }
+    }
+
+    function toggleListOfTags(){
+      var hide = document.getElementById("listOfTags");
+        if (hide.style.display === "block") {
+          hide.style.display = "none";
+        }
+        else {
+          hide.style.display = "block";
+        }
+    }
+
+    $scope.postsTags = function(index){
+      $http({
+        method: "GET",
+        url: "https://dummyapi.io/data/api/tag/"+$scope.tags[index]+"/post",
+        headers:{"app-id": "5fce49af8e1c4117d5c98626"}
+        })
+      .then(function(response) {
+        $scope.tagged = response.data.data;
+        document.getElementById("fullProfile").style.display="none";
+        document.getElementById("postList").style.display="none";
+        document.getElementById("friendList").style.display="none";
+        document.getElementById("userList").style.display="none";
+        document.getElementById("listOfTags").style.display="none";
+        document.getElementById("tagList").style.display="none";
+        document.getElementById("postByTagList").style.display="block";
+        document.getElementById("postComments").style.display="none";
+        document.getElementById("generalPostList").style.display="none";
+        document.getElementById("generalPosts").style.display="none";
+        document.getElementById("information").style.display="none";
+        document.getElementById("aboutUs").style.display="none";
+        console.log($scope.tagged);
+        })
+    }
+// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//Comment Functions-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    $scope.getComments = function(id){
+      $http({
+        method: "GET",
+        url: "https://dummyapi.io/data/api/post/"+id+"/comment",
+        headers:{"app-id": "5fce49af8e1c4117d5c98626"}
+        })
+      .then(function(response) {
+        $scope.comments = response.data.data;
+        document.getElementById("fullProfile").style.display="none";
+        document.getElementById("postList").style.display="none";
+        document.getElementById("friendList").style.display="none";
+        document.getElementById("userList").style.display="none";
+        document.getElementById("listOfTags").style.display="none";
+        document.getElementById("tagList").style.display="none";
+        document.getElementById("postByTagList").style.display="none";
+        document.getElementById("postComments").style.display="block";
+        document.getElementById("generalPostList").style.display="none";
+        document.getElementById("generalPosts").style.display="none";
+        document.getElementById("information").style.display="none";
+        document.getElementById("aboutUs").style.display="none";
+        console.log($scope.comments);
+        })
+    }
+// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//About Us Function-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    $scope.info = function(id){
+        document.getElementById("fullProfile").style.display="none";
+        document.getElementById("postList").style.display="none";
+        document.getElementById("friendList").style.display="none";
+        document.getElementById("userList").style.display="none";
+        document.getElementById("listOfTags").style.display="none";
+        document.getElementById("tagList").style.display="none";
+        document.getElementById("postByTagList").style.display="none";
+        document.getElementById("postComments").style.display="none";
+        document.getElementById("generalPostList").style.display="none";
+        document.getElementById("generalPosts").style.display="none";
+        document.getElementById("information").style.display="none";
+        document.getElementById("aboutUs").style.display="block";
+        }
+// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    });
+    </script>
+
+  </head>
+
+  <body class="bg">
+  	<app-root>
+  	<div class="col-12" style="display: inline-block;">
+    <div class="col-3 button button-post" id="generalPostList" ng-Click="mainMenuPost()">Posts List</div>
+    <div class="col-3 button button-friend" id="friendList" ng-click="friendList()">Friend List</div>
+    <div class="col-3 button button-tag" id="tagList" ng-click="tagList()">Tag List</div>
+    <div class="col-3 button button-about" id="information" ng-click="info()" style="margin-bottom: 1cm;">About Us</div>
+    </div>
+    <div id="generalPosts" class="col-12">
+      <div ng-repeat="gPost in generalPost" style="display: inline-block; " class="col-4">
+        <div class="wrapper ops">
+          <div class="col-10">	
+          <img ng-src="{{gPost.owner.picture}}"  width="100%" height="200px" alt="" style="padding-left: 0.5cm;">
+          </div>
+          <p style="padding-left: 0.5cm;">   {{gPost.owner.firstName}} {{gPost.owner.lastName}}</p>
+          <p style="padding-left: 0.5cm;">   {{gPost.owner.email}}</p>
+          <div class="col-10">
+          <img ng-src="{{gPost.image}}" width="100%" height="200px" class="g-post" alt="" style="padding-left: 0.5cm;">
+          </div>
+          <div ng-repeat="value in generalPost[$index].tags">
+            <div id="postTags" style="padding-left: 0.5cm;">  {{value}} </div>
+          </div>
+          <div class="col-10">
+          <p style="padding-left: 0.5cm;">  {{gPost.text}}</p>
+          <a href="{{gPost.link}}" target="_blank" style="padding-left: 0.5cm;">{{gPost.link}}</a>
+          <p style="padding-left: 0.5cm;">{{gPost.likes}} Likes</p>     <p style="padding-left: 0.5cm;"> {{gPost.publishDate}}</p>
+          </div>
+          <div class="col-12">
+          <div class="col-5 buttons" ng-click="getComments(generalPost[$index].id)" style="margin-left: 1cm;">Get Post Comments</div> <br>
+          <div class="col-5 buttons" ng-click="viewProfile(generalPost[$index].owner.id)" style="margin-left: 1cm; margin-bottom: 0.5cm;" >Get Owner Profile</div>
+      	</div>
+        </div>
+      </div>
+  </div>
+
+    <div id="userList" class="col-12" style="margin-left: 4cm;">
+      <div ng-repeat="name in list" style="display: inline-block;" class="col-4 box">
+        <img ng-src="{{name.picture}}" alt="">
+        <p style="padding-left: 0.5cm;">{{name.id}}</p>
+        <p style="padding-left: 0.5cm;">{{name.title}} {{name.firstName}} {{name.lastName}}</p>
+        <p style="padding-left: 0.5cm;">{{name.email}}</p>
+        <div class="buttons" ng-click="viewProfile(list[$index].id)" style="margin-left: 1cm;">Get Full Profile</div><br>
+        <div class="buttons" ng-click="viewPosts(list[$index].id)" style="margin-left: 1cm;">Get Posts List</div><br>
+      </div>
+    </div>
+
+      <div id="fullProfile" class="col-12 profile">
+      	<div class="col-12"></div>
+      	<div class="col-12">
+        <img ng-src="{{pPicture}}" alt="">
+        <p>{{pID}}</p>
+        <p>{{pTitle}} {{pFirstName}} {{pLastName}}</p>
+        <p>Gender: {{pGender}}</p>
+        <p>Date of Birth: {{pBirthDate}}</p>
+        <p>Register Date: {{pRegisterDate}}</p>
+        <p>{{pEmail}}</p>
+        <p>{{pPhone}}</p>
+        <p>Address</p>
+        <p>{{pCountry}}, {{pState}}, {{pCity}}</p>
+        <p>{{pStreet}}</p>
+        <div class="buttons" ng-click="viewPosts(profile.id)" style="margin-left: 4cm;">Get Posts List</div>
+        <div class="buttons" ng-click="return()" style="margin-left: 4cm;">Return</div>
+    	</div>
+        <div class="col-4"></div>
+      </div>
+
+      <div id="postList" class="col-12">
+          <div ng-repeat="data in post" style="display: inline-block;" class="col-4">
+            <div class="wrapper">
+              <img ng-src="{{data.owner.picture}}" alt="">
+              <p style="padding-left: 0.5cm;">{{data.owner.firstName}} {{data.owner.lastName}}</p>
+              <p style="padding-left: 0.5cm;">{{data.owner.email}}</p>
+              <img ng-src="{{data.image}}" style="width: 100px" width="200px" alt="">
+
+              <div ng-repeat="value in post[$index].tags">
+                <div id="postTags">{{value}} </div>
+              </div>
+
+              <p style="padding-left: 0.5cm;">{{data.text}}</p>
+              <a href="{{data.link}}" target="_blank" style="padding-left: 0.5cm;">{{data.link}}</a>
+              <p style="padding-left: 0.5cm;">{{data.likes}} Likes            {{data.publishDate}}</p>
+              <div class="buttons" ng-click="getComments(post[$index].id)" style="margin-left: 1cm;">Get Post Comments</div>
+              <div class="buttons" ng-click="viewProfile(post[$index].owner.id)" style="margin-left: 1cm;">Get Owner Profile</div>
+            </div>
+          </div>
+          <div class="buttons" ng-click="return()">Return</div>
+      </div>
+
+        <div id="listOfTags">
+          <div ng-repeat="tag in tags" class="col-12">
+            <div class="tag" style="margin-bottom: 0.2cm;" >
+              <div id="tags" class="font">{{tag}} </div>
+              <div ng-click="postsTags($index)">Get Posts By Tags</div>
+            </div>
+          </div>
+      </div>
+
+      <div id="postByTagList" class="col-12">
+          <div ng-repeat="postByTag in tagged" style="display: inline-block;" class="col-4">
+            <div class="wrapper">
+              <img ng-src="{{postByTag.owner.picture}}" alt="">
+              <p style="padding-left: 0.5cm;">{{postByTag.owner.firstName}} {{postByTag.owner.lastName}}</p>
+              <p style="padding-left: 0.5cm;">{{postByTag.owner.email}}</p>
+              <img ng-src="{{postByTag.image}}" width="100%" alt="">
+
+              <div ng-repeat="value in tagged[$index].tags">
+                <div id="postTags" style="padding-left: 0.5cm;">{{value}} </div>
+              </div>
+
+              <p style="padding-left: 0.5cm;">{{postByTag.text}}</p>
+              <a href="{{postByTag.link}}" target="_blank" style="padding-left: 0.5cm;">{{postByTag.link}}</a>
+              <p style="padding-left: 0.5cm;">{{postByTag.likes}} Likes            {{postByTag.publishDate}}</p>
+              <div class="buttons" ng-click="getComments(tagged[$index].id)" style="margin-left: 1cm;">Get Post Comments</div><br>
+              <div class="buttons" ng-click="viewProfile(tagged[$index].owner.id)" style="margin-left: 1cm;">Get Owner Profile</div>
+            </div>
+          </div><br>
+        <div class="buttons" ng-click="return()">Return</div>
+      </div>
+
+      <div id="postComments">
+          <div ng-repeat="comment in comments">
+            <div class="wrapper">
+              <img ng-src="{{comment.owner.picture}}" alt="">
+              <p>{{comment.owner.firstName}} {{comment.owner.lastName}}</p>
+              <p>{{comment.publishDate}}</p>
+              <p>{{comment.message}}</p>
+              <div class="buttons" ng-click="viewProfile(comment.owner.id)">View Profile</div><br>
+            </div>
+          </div><br>
+          <div class="buttons" ng-click="return()">Return</div>
+      </div>
+
+      <div id="aboutUs">
+      	<div class="col-12 about">
+      		<div class="col-4"  style="display: inline-block;">
+      			<img class="pic" src="andre.jpg">
+      			<h3>Nama	: Andre Chandra </h3>
+      			<h4>NIM		: 00000036266</h4>
+      		</div>
+      		<div class="col-4"  style="display: inline-block;">
+      			<img class="pic" src="andrew.jpg">
+      			<h3>Nama	: Andrew Enrico </h3>
+      			<h4>NIM		: 00000036215</h4>
+      		</div>
+      		<div class="col-4"  style="display: inline-block;">
+      			<img class="pic" src="chotiwut.jpg">
+      			<h3>Nama	: Chotiwut </h3>
+      			<h4>NIM		:00000034993</h4>      		
+      		</div>
+      		<div class="col-4"  style="display: inline-block;">
+      			<img class="pic" src="wiliam.jpg">
+      			<h3>Nama	: Wiliam Wijaya</h3>
+      			<h4>NIM		: 00000036425</h4>
+      		</div>
+      	</div>
+        <div class="buttons" ng-click="return()" style="margin-left: 4cm;">Return</div>
+      </div>
+  </app-root>
+  </body>
+</html>
